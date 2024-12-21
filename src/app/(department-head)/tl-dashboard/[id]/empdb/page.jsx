@@ -1,10 +1,10 @@
-import EmployeeOverview from '@/components/Tl/EmployeeOverview'
+import EmployeeDatabase from '@/components/Tl/EmployeeDatabase'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <EmployeeOverview />
+        <EmployeeDatabase/>
     </div>
   )
 }

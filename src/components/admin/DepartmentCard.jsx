@@ -2,12 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Users, DollarSign } from 'lucide-react'
 import Link from "next/link"
-import { buttonVariants } from "../ui/button"
-
+import { Button } from "@/components/ui/button"
 
 export function DepartmentCard({ department }) {
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>{department.name}</CardTitle>
         <CardDescription>{department.description}</CardDescription>
@@ -20,17 +19,23 @@ export function DepartmentCard({ department }) {
           </Avatar>
           <div>
             <p className="text-sm font-medium">Manager</p>
-            <p className="text-sm text-gray-500">{department.manager}</p>
+            <p className="text-sm text-muted-foreground">{department.manager}</p>
           </div>
         </div>
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <Users className="h-5 w-5 text-gray-500 mr-2" />
-            <span className="text-sm text-gray-500">{department.employeeCount} employees</span>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center">
+              <Users className="h-5 w-5 text-muted-foreground mr-2" />
+              <span className="text-sm text-muted-foreground">{department.employeeCount} employees</span>
+            </div>
+            <div className="flex items-center">
+              <DollarSign className="h-5 w-5 text-muted-foreground mr-2" />
+              <span className="text-sm text-muted-foreground">${department.budget}</span>
+            </div>
           </div>
-          <div className="flex items-center">
-            <Link href={`/tl-dashboard/${department.id}`} className={buttonVariants()}>View details</Link>
-          </div>
+          <Button asChild>
+            <Link href={`/tl-dashboard/${department.id}`}>View details</Link>
+          </Button>
         </div>
       </CardContent>
     </Card>
