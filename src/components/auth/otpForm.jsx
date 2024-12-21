@@ -37,7 +37,7 @@ export default function OTPForm() {
     if (json.message) {
         
 
-        const response2 = await fetch(`http://localhost:4000/signup`, {
+        const response2 = await fetch(`${BaseApiUrl}/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
