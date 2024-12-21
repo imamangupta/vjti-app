@@ -5,13 +5,59 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { Button } from "@/components/ui/button"
 import { Toaster } from "@/components/ui/toaster"
 import { toast } from '@/hooks/use-toast'
+import { BaseApiUrl } from '@/utils/constants'
+
+import { useRouter } from 'next/navigation'
+
+
+// import { toast } from "sonner";
 
 export default function OTPForm() {
+
+  
+    const router = useRouter()
+  
   const [otp, setOtp] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (otp.length === 6) {
+
+
+
+      const response = await fetch(`${BaseApiUrl}/api/user/checkout`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: localStorage.getItem('email'), userotp: otp })
+    });
+    const json = await response.json();
+
+    if (json.message) {
+        
+
+        const response2 = await fetch(`http://localhost:4000/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: json.data.userObject.userName, secret: 'secret', email: json.data.userObject.email, first_name: json.firstname, last_name: json.lastname, })
+        });
+        const json2 = await response2.json();
+
+        localStorage.setItem('token', json.data.token)
+        // toast.success("Signup SuccessFull", json2);
+        router.push("/dashboard")
+    } else {
+        toast.error("Error to Create");
+    }
+
+
+
+
+
+
       // Here you would typically send the OTP to your server for verification
       console.log('Submitting OTP:', otp)
       toast({
