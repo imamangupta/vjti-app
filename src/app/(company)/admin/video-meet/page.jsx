@@ -1,8 +1,11 @@
+import VideoCall from '@/components/employee/VideoCall'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>Video Meet page</div>
+    <div>
+      <VideoCall/>
+    </div>
   )
 }
 

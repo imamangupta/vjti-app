@@ -29,8 +29,8 @@ const InterviewRoom = () => {
       // Initialize participant details
       const userID = Math.floor(Math.random() * 10000).toString();
       const userName = "userName" + userID;
-      const appID = 1546121164;
-      const serverSecret = "799c19b361afe8fd61a23e634eb62035";
+      const appID = 1785869835;
+      const serverSecret = "2ecc625dc2d6ae7172d00dd6cf1becf4";
       
       // Generate the token for the video call
       const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
