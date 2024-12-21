@@ -29,7 +29,7 @@ export function DepartmentCard({ department }) {
             <span className="text-sm text-gray-500">{department.employeeCount} employees</span>
           </div>
           <div className="flex items-center">
-            <Link href={`/admin/departments/${department.id}`} className={buttonVariants()}>View details</Link>
+            <Link href={`/tl-dashboard/${department.id}`} className={buttonVariants()}>View details</Link>
           </div>
         </div>
       </CardContent>

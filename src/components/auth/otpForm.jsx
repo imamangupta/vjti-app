@@ -10,8 +10,6 @@ import { BaseApiUrl } from '@/utils/constants'
 import { useRouter } from 'next/navigation'
 
 
-// import { toast } from "sonner";
-
 export default function OTPForm() {
 
   
@@ -47,7 +45,6 @@ export default function OTPForm() {
         const json2 = await response2.json();
 
         localStorage.setItem('token', json.data.token)
-        // toast.success("Signup SuccessFull", json2);
         router.push("/dashboard")
     } else {
         toast.error("Error to Create");
