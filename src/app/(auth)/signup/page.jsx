@@ -4,20 +4,56 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { BaseApiUrl } from "@/utils/constants";
 import Link from "next/link";
 import React from "react";
+import { useRouter } from 'next/navigation'
 
+
+import { toast } from "sonner";
 const SignUpPage = () => {
-  const handleSubmit = (e) => {
+
+  const router = useRouter()
+
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
 
     // Create a new FormData object
     const formData = new FormData(e.target);
 
+
     const email = formData.get("email");
     const username = formData.get("username");
     const role = formData.get("role");
     const password = formData.get("password");
+
+
+
+
+    // let { email, password, userName, userType, firstname, lastname } = formData
+    const response = await fetch(`${BaseApiUrl}/api/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email, password: password, role: role, username: username,firstname:'firstname',lastname:'lastname' })
+    });
+    const json = await response.json();
+
+    if (json) {
+      console.log(json);
+      
+      localStorage.setItem('email', email)
+      toast.success("Otp send successfully");
+      router.push("/otp")
+    } else {
+      toast.error("Error to Create");
+    }
+
+
 
     console.log({ email, username, role, password });
   };

@@ -3,11 +3,19 @@ import AuthWarp from '@/components/AuthWraper'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { BaseApiUrl } from '@/utils/constants'
 import Link from 'next/link'
 import React from 'react'
 
+import { useRouter } from 'next/navigation'
+
+
 const LoginPage = () => {
-  const handlesubmit = (e)=>{
+
+  
+  const router = useRouter()
+
+  const handlesubmit = async (e)=>{
     e.preventDefault(); // Prevent default form submission
 
     // Create a new FormData object
@@ -17,8 +25,31 @@ const LoginPage = () => {
     const email = formData.get('email');
     const password = formData.get('password');
 
-    console.log({ email, password });
+    const response = await fetch(`${BaseApiUrl}/api/user/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email, password: password })
+    })
+    const json = await response.json()
+
+    if (json.data) {
+      console.log(json)
+      // toast.success("Login Successful")
+      localStorage.setItem('token', json.data.token)
+      router.push("/dashboard")
+    } else {
+      // toast.error("Invalid Credentials")
+    }
+
+    // console.log({ email, password });
   }
+
+
+
+
+  
   return (
     <section className="flex justify-center items-center h-screen">
       <AuthWarp
