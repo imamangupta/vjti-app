@@ -3,6 +3,7 @@ import AuthWarp from '@/components/AuthWraper'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Link from 'next/link'
 import React from 'react'
 
 const LoginPage = () => {
@@ -21,7 +22,7 @@ const LoginPage = () => {
   return (
     <section className="flex justify-center items-center h-screen">
       <AuthWarp
-       title="Login" description="Welcome back , to your account"
+       title="Login in to your account" description="Welcome back , to your account"
       >
         <form onSubmit={handlesubmit} className="my-4">
           <div className="flex flex-col space-y-2 my-2">
@@ -37,6 +38,9 @@ const LoginPage = () => {
             Submit
           </Button>
         </form>
+        <div className="">
+          <p className="text-center my-5">Don't Have Account ? <Link href={"/login"} className="underline">login</Link></p>
+        </div>
       </AuthWarp>
     </section>
   )
