@@ -1,6 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Users, DollarSign } from 'lucide-react'
+import Link from "next/link"
+import { buttonVariants } from "../ui/button"
 
 
 export function DepartmentCard({ department }) {
@@ -27,8 +29,7 @@ export function DepartmentCard({ department }) {
             <span className="text-sm text-gray-500">{department.employeeCount} employees</span>
           </div>
           <div className="flex items-center">
-            <DollarSign className="h-5 w-5 text-gray-500 mr-2" />
-            <span className="text-sm text-gray-500">${department.budget.toLocaleString()}</span>
+            <Link href={`/admin/departments/${department.id}`} className={buttonVariants()}>View details</Link>
           </div>
         </div>
       </CardContent>
