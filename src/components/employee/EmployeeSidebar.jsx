@@ -7,6 +7,8 @@ import {
   FolderKanban,
   ChartArea,
   Building2,
+  ClipboardList,
+  ListChecks
 } from "lucide-react";
 
 import Link from "next/link";
@@ -26,8 +28,9 @@ import {
 
 
 const companyNav = [
-  { name: "Dashboard", Icon: ChartArea, link: "/admin" },
-  { name: "Projects", Icon: FolderKanban, link: "/admin/projects" },
+  { name: "Dashboard", Icon: ChartArea, link: "/dashboard/overview" },
+  { name: "Tasks", Icon: ClipboardList, link: "/dashboard/tasks" },
+  { name: "AI Task Breakdown", Icon: ListChecks, link: "/dashboard/todo" },
   { name: "Employees", Icon: Database, link: "/admin/employee" },
   { name: "Settings", Icon: Settings, link: "/admin/settings" },
 ];
