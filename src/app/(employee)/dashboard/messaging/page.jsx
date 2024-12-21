@@ -1,9 +1,11 @@
+import Messaging from '@/components/employee/Messaging'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      Home page</div>
+        <Messaging/>
+    </div>
   )
 }
 
