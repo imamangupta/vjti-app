@@ -1,4 +1,3 @@
-import "@/app/globals.css"
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
