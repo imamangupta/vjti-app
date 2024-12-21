@@ -26,7 +26,7 @@ import {
 } from 'lucide-react'
 
 const companyNav = [
-  { name: "Dashboard", icon: ChartArea, link: "/dashboard/overview" },
+  { name: "Dashboard", icon: ChartArea, link: "/dashboard" },
   { name: "Tasks", icon: ClipboardList, link: "/dashboard/tasks" },
   { name: "AI Task Breakdown", icon: ListChecks, link: "/dashboard/todo" },
   { name: "10x Prompt", icon: BotMessageSquare, link: "/dashboard/prompt" },
