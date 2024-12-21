@@ -16,12 +16,7 @@ const AuthWarp = ({
         <p className="text-slate-400 text-center my-3 w-[29ch] text-sm">{description}</p>
       </div>
       <div>{children}</div>
-      <hr className="my-5" />
-      <div>
-        <Button variant={"secondary"} className="w-full">
-          Sign in With Google
-        </Button>
-      </div>
+    
     </section>
   );
 };

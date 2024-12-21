@@ -1,3 +1,4 @@
+import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
@@ -8,9 +9,9 @@ const layout = ({ children }) => {
       <SidebarProvider>
         <div>
           <AdminSidebar />
-          <h1>sidebar</h1>
         </div>
-        <div>
+        <div className=" w-full">
+            <AdminNavbar />
             {children}
         </div>
       </SidebarProvider>
