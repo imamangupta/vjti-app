@@ -10,7 +10,7 @@ const SlashCommandMenu = ({ editor, onAIAction }) => {
     { name: 'AI Enhance', icon: <Zap size={18} />, action: () => onAIAction('enhance') },
     { name: 'Insert Table', icon: <Table size={18} />, action: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
     { name: 'Insert Image', icon: <Image size={18} />, action: () => {
-      const url = window.prompt('Enter the URL of the image:');
+      const url = window.prompt('Enter the URL of the images:');
       if (url) {
         editor.chain().focus().setImage({ src: url }).run();
       }
