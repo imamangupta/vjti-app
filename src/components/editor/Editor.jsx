@@ -27,7 +27,7 @@ const Editor = () => {
         nested: true,
       }),
     ],
-    content: "<p>Hello World! 🌎️</p>",
+    content: "<p>Hello World!! 🌎️</p>",
     onUpdate: ({ editor }) => {
       const { state } = editor;
       const { selection } = state;
