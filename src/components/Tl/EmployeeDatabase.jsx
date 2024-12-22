@@ -221,7 +221,7 @@ export default function EmployeeOverview({ deptId }) {
         </Dialog>
       </div>
       
-      <motion.div
+      {/* <motion.div
         initial="hidden"
         animate="visible"
         variants={{
@@ -262,13 +262,54 @@ export default function EmployeeOverview({ deptId }) {
             </CardContent>
           </MotionCard>
         ))}
-      </motion.div>
+      </motion.div> */}
 
-      <div>
-        {memberData.map((item, index) => (
-          <div key={index}>{item.memberId}</div>
-        ))}
+
+
+
+
+      <div className="container mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold mb-4">Employee</h2>
+      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table className="max-w-7xl leading-normal">
+          <thead>
+            <tr>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                sno
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Previlage
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {memberData.map((item, index) => (
+              <tr key={index}>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <div className="flex items-center">
+                    <div className="ml-3">
+                      <p className="text-gray-900 whitespace-no-wrap">{index+1}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">{item.memberId}</p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">Normal User</p>
+                </td>
+               
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+    </div>
+
+     
     </div>
   );
 }
