@@ -84,7 +84,6 @@
   body {
     @apply bg-background text-foreground;
   }
-<<<<<<< HEAD
 
   .editor {
     position: relative;
@@ -138,6 +137,4 @@
       display: none;
     }
   }
-=======
->>>>>>> parent of 5caa12a (document update)
 }
