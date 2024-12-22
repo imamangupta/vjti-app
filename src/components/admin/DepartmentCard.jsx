@@ -33,6 +33,8 @@ export function DepartmentCard({ department }) {
               <span className="text-sm text-muted-foreground">${department.budget}</span>
             </div>
           </div> */}
+          <div>
+          </div>
           <Button asChild>
             <Link href={`/tl-dashboard/${department._id}`}>View details</Link>
           </Button>

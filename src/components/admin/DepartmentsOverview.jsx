@@ -24,34 +24,30 @@ const initialDepartments = [
     name: "Human Resources",
     description: "Manages employee relations, recruitment, and workplace policies",
     employeeCount: 15,
-    budget: 500000,
-    manager: "Jane Smith",
+    manager: "Jane Smith"
   },
   {
     id: "2",
     name: "Marketing",
     description: "Develops and implements marketing strategies to promote products/services",
     employeeCount: 25,
-    budget: 1000000,
-    manager: "John Doe",
+    manager: "John Doe"
   },
   {
     id: "3",
     name: "Engineering",
     description: "Designs, develops, and maintains software products and infrastructure",
     employeeCount: 50,
-    budget: 2000000,
-    manager: "Alice Johnson",
+    manager: "Alice Johnson"
   },
   {
     id: "4",
     name: "Finance",
     description: "Manages company finances, budgeting, and financial reporting",
     employeeCount: 20,
-    budget: 750000,
-    manager: "Bob Williams",
-  },
-];
+    manager: "Bob Williams"
+  }
+]
 
 export function DepartmentOverview() {
   const [departments, setDepartments] = useState(initialDepartments);
