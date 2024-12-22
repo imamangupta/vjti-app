@@ -55,28 +55,7 @@ export function CreateDepartmentForm({ onCreateDepartment }) {
           required
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="employeeCount">Employee Count</Label>
-        <Input
-          id="employeeCount"
-          name="employeeCount"
-          type="number"
-          value={newDepartment.employeeCount}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="budget">Budget</Label>
-        <Input
-          id="budget"
-          name="budget"
-          type="number"
-          value={newDepartment.budget}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
+   
       <div className="space-y-2">
         <Label htmlFor="manager">Manager</Label>
         <Input

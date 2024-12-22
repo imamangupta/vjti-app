@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { checkToken } from "@/utils/getUserData"
+import { BaseApiUrl } from "@/utils/constants"
 
 const initialTasks = [
   {
@@ -160,11 +162,52 @@ const TaskCard = ({ task, onStatusChange, onDelete }) => {
 
 const Task = () => {
   const [tasks, setTasks] = useState(initialTasks)
+  const [mytasks, setMyTasks] = useState([])
   const [sortBy, setSortBy] = useState("deadline")
   const [sortOrder, setSortOrder] = useState("asc")
   const [filterStatus, setFilterStatus] = useState("all")
   const [filterPriority, setFilterPriority] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
+
+
+
+
+
+
+
+
+  const fetchTasks = async () => {
+    let data = await checkToken()
+    try {
+      const response = await fetch(`${BaseApiUrl}/api/task/userId`, {
+        method: 'GET',
+        headers: {
+          'id': data.user.email
+        }
+      });
+      
+      const json = await response.json();
+
+      if (json) {
+        console.log(json);
+        
+        setMyTasks(json.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     // Simulated API call to fetch tasks
@@ -175,7 +218,7 @@ const Task = () => {
     //   const data = await response.json();
     //   setTasks(data);
     // };
-    // fetchTasks();
+    fetchTasks();
   }, [])
 
   const handleStatusChange = (taskId, newStatus) => {
@@ -299,6 +342,11 @@ const Task = () => {
             onStatusChange={handleStatusChange}
             onDelete={handleDeleteTask}
           />
+        ))}
+      </div>
+      <div>
+        {mytasks.map((item,index)=>(
+          <div key={index}>{item.description}</div>
         ))}
       </div>
     </div>

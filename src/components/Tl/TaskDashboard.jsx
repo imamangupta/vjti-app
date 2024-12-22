@@ -12,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import CreateTaskForm from "./CreateTaskForm"
+import { BaseApiUrl } from "@/utils/constants"
 
 const initialTasks = [
   {
@@ -24,8 +25,9 @@ const initialTasks = [
   },
 ]
 
-export default function TaskDashboard() {
+export default function TaskDashboard({deptId}) {
   const [tasks, setTasks] = useState(initialTasks)
+  const [mytasks, setMytasks] = useState([])
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterPriority, setFilterPriority] = useState("")
@@ -33,13 +35,94 @@ export default function TaskDashboard() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "ascending" })
   const [selectedDate, setSelectedDate] = useState(null)
 
+
+
+
+
+
+
+
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${BaseApiUrl}/api/task/deptId`, {
+        method: 'GET',
+        headers: {
+          'id': deptId
+        }
+      });
+      
+      const json = await response.json();
+
+      if (json) {
+        console.log(json);
+        
+        setMytasks(json.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
+    fetchData()
     // This effect would typically fetch tasks from an API
     setTasks(initialTasks)
   }, [])
 
-  const addTask = (newTask) => {
+  const addTask = async (newTask) => {
     setTasks([...tasks, newTask])
+
+    console.log(newTask);
+    
+
+
+
+
+    const response = await fetch(`${BaseApiUrl}/api/task`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({   
+        departmentId:deptId,
+        assignUserId:newTask.username,
+        description: newTask.description,
+        title: newTask.name,
+        status: newTask.status,
+        priority: newTask.priority,
+        deadline: newTask.deadline,
+      })
+    })
+    const json = await response.json()
+
+    if (json.data) {
+      console.log(json)
+      fetchData()
+    } 
+
+
     setIsFormOpen(false)
   }
 
@@ -184,7 +267,7 @@ export default function TaskDashboard() {
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3 }}
           >
-            <CreateTaskForm onSubmit={addTask} onClose={() => setIsFormOpen(false)} />
+            <CreateTaskForm deptId={deptId} onSubmit={addTask} onClose={() => setIsFormOpen(false)} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -277,6 +360,12 @@ export default function TaskDashboard() {
           </TableBody>
         </Table>
       </motion.div>
+
+      <div>
+        {mytasks.map((item , index)=>(
+          <div key={index}>{item.title}</div>
+        ))}
+      </div>
     </div>
   )
 }

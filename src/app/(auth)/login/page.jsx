@@ -39,7 +39,13 @@ const LoginPage = () => {
         console.log(json)
         toast.success("Login Successful")
         localStorage.setItem('token', json.data.token)
-        router.push("/dashboard")
+        if (json.data.role ==="company") {
+          
+          router.push("/admin")
+        }else{
+          router.push("/dashboard")
+
+        }
       } else {
         toast.error("Invalid Credentials")
       }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BaseApiUrl } from "@/utils/constants";
 
 const initialEmployeeData = [
   {
@@ -30,27 +31,7 @@ const initialEmployeeData = [
     dob: "1990-05-15",
     avatar: "/placeholder.svg?height=100&width=100",
   },
-  {
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    username: "janes",
-    dob: "1988-09-22",
-    avatar: "/placeholder.svg?height=100&width=100",
-  },
-  {
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    username: "alicej",
-    dob: "1992-11-30",
-    avatar: "/placeholder.svg?height=100&width=100",
-  },
-  {
-    name: "Bob Williams",
-    email: "bob.williams@example.com",
-    username: "bobw",
-    dob: "1985-03-18",
-    avatar: "/placeholder.svg?height=100&width=100",
-  },
+  // ... other initial data
 ];
 
 const MotionCard = motion(Card);
@@ -60,7 +41,12 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export default function EmployeeOverview() {
+export default function EmployeeOverview({ deptId }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [textshow, setTextshow] = useState(false);
+  const [memberData, setMemberData] = useState([]);
   const [employeeData, setEmployeeData] = useState(initialEmployeeData);
   const [newEmployee, setNewEmployee] = useState({
     name: "",
@@ -69,26 +55,121 @@ export default function EmployeeOverview() {
     dob: "",
   });
 
+  // Reset all form-related states when dialog is closed
+  const handleDialogChange = (open) => {
+    setIsDialogOpen(open);
+    if (!open) {
+      // Reset all states when dialog is closed
+      setNewEmployee({
+        name: "",
+        email: "",
+        username: "",
+        dob: "",
+      });
+      setIsEmailVerified(false);
+      setIsVerifying(false);
+      setTextshow(false);
+    }
+  };
+
+  const handleVerifyEmail = async () => {
+    if (!newEmployee.email) return;
+    
+    setIsVerifying(true);
+    setTextshow(false);
+    setIsEmailVerified(false);
+
+    try {
+      const response = await fetch(`${BaseApiUrl}/api/member/checkemail`, {
+        method: 'GET',
+        headers: {
+          'email': newEmployee.email
+        }
+      });
+
+      const json = await response.json();
+
+      if (json) {
+        if (json.available) {
+          setTextshow(true);
+        } else {
+          setIsEmailVerified(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error verifying email:', error);
+      setTextshow(false);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewEmployee((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddEmployee = () => {
-    if (newEmployee.name && newEmployee.email && newEmployee.username && newEmployee.dob) {
-      setEmployeeData((prev) => [
-        ...prev,
-        { ...newEmployee, avatar: "/placeholder.svg?height=100&width=100" },
-      ]);
-      setNewEmployee({ name: "", email: "", username: "", dob: "" });
+    // Reset verification states when email changes
+    if (name === 'email') {
+      setIsEmailVerified(false);
+      setTextshow(false);
     }
   };
+
+  const handleAddEmployee = async () => {
+    if (!isEmailVerified) return;
+
+    try {
+      const response = await fetch(`${BaseApiUrl}/api/member`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          memberId: newEmployee.email,
+          memberName: "none",
+          departmentId: deptId
+        })
+      });
+
+      const json = await response.json();
+
+      if (json.data) {
+        console.log(json);
+        handleDialogChange(false); // Use the handleDialogChange to ensure proper cleanup
+        fetchData(); // Fetch updated data after successful addition
+      }
+    } catch (error) {
+      console.error('Error adding employee:', error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${BaseApiUrl}/api/department/id`, {
+        method: 'GET',
+        headers: {
+          'id': deptId
+        }
+      });
+      
+      const json = await response.json();
+
+      if (json) {
+        setMemberData(json.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [deptId]);
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Employee Overview</h1>
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
           <DialogTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" /> Add Employee
@@ -103,60 +184,43 @@ export default function EmployeeOverview() {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={newEmployee.name}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="email" className="text-right">
                   Email
                 </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={newEmployee.email}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Username
-                </Label>
-                <Input
-                  id="username"
-                  name="username"
-                  value={newEmployee.username}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="dob" className="text-right">
-                  Date of Birth
-                </Label>
-                <Input
-                  id="dob"
-                  name="dob"
-                  type="date"
-                  value={newEmployee.dob}
-                  onChange={handleInputChange}
-                  className="col-span-3"
-                />
+                <div className="col-span-3 flex gap-2">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={newEmployee.email}
+                    onChange={handleInputChange}
+                    className="flex-grow"
+                  />
+                  <Button
+                    onClick={handleVerifyEmail}
+                    disabled={isVerifying || isEmailVerified || !newEmployee.email}
+                    size="sm"
+                  >
+                    {isVerifying ? 'Verifying...' : isEmailVerified ? 'Verified' : 'Verify'}
+                  </Button>
+                </div>
               </div>
             </div>
-            <Button onClick={handleAddEmployee}>Add Employee</Button>
+            <div className="text-center text-sm text-red-500">
+              {textshow && 'Already In the Department'}
+            </div>
+            <div className="flex justify-end gap-4">
+              <Button variant="outline" onClick={() => handleDialogChange(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddEmployee} disabled={!isEmailVerified}>
+                Continue
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
+      
       <motion.div
         initial="hidden"
         animate="visible"
@@ -199,7 +263,12 @@ export default function EmployeeOverview() {
           </MotionCard>
         ))}
       </motion.div>
+
+      <div>
+        {memberData.map((item, index) => (
+          <div key={index}>{item.memberId}</div>
+        ))}
+      </div>
     </div>
   );
 }
-

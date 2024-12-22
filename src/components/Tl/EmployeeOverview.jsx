@@ -190,7 +190,7 @@ const CustomizedRectangle = (props) => {
   });
 };
 
-export default function EmployeeOverview() {
+export default function EmployeeOverview({deptId}) {
   const [activeTab, setActiveTab] = useState("performance");
   const [isMobile, setIsMobile] = useState(550);
 

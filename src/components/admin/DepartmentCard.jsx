@@ -9,13 +9,13 @@ export function DepartmentCard({ department }) {
     <Card className="w-full">
       <CardHeader>
         <CardTitle>{department.name}</CardTitle>
-        <CardDescription>{department.description}</CardDescription>
+        <CardDescription>{department.discription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center space-x-4 mb-4">
           <Avatar>
             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${department.manager}`} alt={department.manager} />
-            <AvatarFallback>{department.manager.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+            <AvatarFallback>AG</AvatarFallback>
           </Avatar>
           <div>
             <p className="text-sm font-medium">Manager</p>
@@ -23,7 +23,7 @@ export function DepartmentCard({ department }) {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+          {/* <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <Users className="h-5 w-5 text-muted-foreground mr-2" />
               <span className="text-sm text-muted-foreground">{department.employeeCount} employees</span>
@@ -32,9 +32,9 @@ export function DepartmentCard({ department }) {
               <DollarSign className="h-5 w-5 text-muted-foreground mr-2" />
               <span className="text-sm text-muted-foreground">${department.budget}</span>
             </div>
-          </div>
+          </div> */}
           <Button asChild>
-            <Link href={`/tl-dashboard/${department.id}`}>View details</Link>
+            <Link href={`/tl-dashboard/${department._id}`}>View details</Link>
           </Button>
         </div>
       </CardContent>
