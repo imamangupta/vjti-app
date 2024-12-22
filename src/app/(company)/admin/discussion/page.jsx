@@ -14,7 +14,7 @@ const page = () => {
     let data = await checkToken();
     console.log(data.user.userName);
 
-    setdata(data.user.userName);
+    setdata(data?.user?.userName);
   }
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Send, Phone, Video } from 'lucide-react'
 import ChatsPage from '../chatsPage'
+import { checkToken } from '@/utils/getUserData'
 
 export default function Messaging() {
   const [messages, setMessages] = useState([
@@ -30,7 +31,7 @@ export default function Messaging() {
     let data = await checkToken();
     console.log(data.user.userName);
 
-    setdata(data.user.userName);
+    setdata(data?.user?.userName);
   }
 
   useEffect(() => {
