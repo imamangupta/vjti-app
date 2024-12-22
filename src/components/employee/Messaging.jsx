@@ -30,9 +30,9 @@ export default function Messaging() {
 
   const fetchdata = async () => {
     let data = await checkToken();
-    console.log(data.user.userName);
+    console.log(data);
 
-    setdata(data?.user?.userName);
+    setdata(data);
   }
 
   useEffect(() => {
@@ -41,7 +41,14 @@ export default function Messaging() {
 
 
   return (<>
-    <ChatsPage data={data} />
+{/* 
+  <div>
+    {data?.user?.userName}
+    <div>alsidhfli</div>
+  </div> */}
+
+  {data? <ChatsPage data={data?.user?.userName} />:''}
+    {/* <ChatsPage data={data?.user?.userName} /> */}
   </>
     // <motion.div
     //   initial={{ opacity: 0, y: 20 }}

@@ -15,14 +15,14 @@ import CreateTaskForm from "./CreateTaskForm"
 import { BaseApiUrl } from "@/utils/constants"
 
 const initialTasks = [
-  {
-    id: 1,
-    name: "Develop new feature",
-    priority: "high",
-    deadline: "15/3/2024",
-    status: "in progress",
-    description: "Implement user authentication system with OAuth 2.0. This will involve setting up the backend API endpoints, integrating with a third-party OAuth provider, and creating the frontend components for login and registration. Ensure proper error handling and security measures are in place.",
-  },
+  // {
+  //   id: 1,
+  //   name: "Develop new feature",
+  //   priority: "high",
+  //   deadline: "15/3/2024",
+  //   status: "in progress",
+  //   description: "Implement user authentication system with OAuth 2.0. This will involve setting up the backend API endpoints, integrating with a third-party OAuth provider, and creating the frontend components for login and registration. Ensure proper error handling and security measures are in place.",
+  // },
 ]
 
 export default function TaskDashboard({deptId}) {
@@ -326,9 +326,9 @@ export default function TaskDashboard({deptId}) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedTasks.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell className="font-medium">{task.name}</TableCell>
+            {mytasks.map((task) => (
+              <TableRow key={task._id}>
+                <TableCell className="font-medium">{task.title}</TableCell>
                 <TableCell>
                   <Badge className={`${getPriorityColor(task.priority)} text-white`}>
                     {task.priority}
@@ -349,7 +349,7 @@ export default function TaskDashboard({deptId}) {
                     <Button
                       variant="ghost"
                       className="text-red-600 hover:text-red-800"
-                      onClick={() => deleteTask(task.id)}
+                      onClick={() => deleteTask(task._id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -361,11 +361,11 @@ export default function TaskDashboard({deptId}) {
         </Table>
       </motion.div>
 
-      <div>
+      {/* <div>
         {mytasks.map((item , index)=>(
           <div key={index}>{item.title}</div>
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }

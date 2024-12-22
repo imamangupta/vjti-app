@@ -8,36 +8,40 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useGroqAI } from '@/hooks/useGroqAI'
+import { checkToken } from "@/utils/getUserData"
+import { BaseApiUrl } from "@/utils/constants"
 
-const dummyTasks = [
-  {
-    id: 1,
-    name: "Develop new feature",
-    priority: "high",
-    deadline: "2024-03-15",
-    status: "in progress",
-    description: "Implement user authentication system with OAuth 2.0. This will involve setting up the backend API endpoints, integrating with a third-party OAuth provider, and creating the frontend components for login and registration. Ensure proper error handling and security measures are in place.",
-    subtasks: []
-  },
-  {
-    id: 2,
-    name: "Refactor database schema",
-    priority: "medium",
-    deadline: "2024-04-01",
-    status: "todo",
-    description: "Optimize the current database schema to improve query performance and reduce redundancy. This task involves analyzing the current schema, identifying bottlenecks, and implementing changes such as adding indexes, normalizing tables, and optimizing join operations.",
-    subtasks: []
-  },
-  {
-    id: 3,
-    name: "Create comprehensive test suite",
-    priority: "high",
-    deadline: "2024-03-30",
-    status: "in progress",
-    description: "Develop a comprehensive test suite covering unit tests, integration tests, and end-to-end tests for the entire application. This includes writing test cases for all major components, setting up a CI/CD pipeline for automated testing, and ensuring at least 80% code coverage.",
-    subtasks: []
-  },
-]
+
+
+// const dummyTasks = [
+//   {
+//     id: 1,
+//     name: "Develop new feature",
+//     priority: "high",
+//     deadline: "2024-03-15",
+//     status: "in progress",
+//     description: "Implement user authentication system with OAuth 2.0. This will involve setting up the backend API endpoints, integrating with a third-party OAuth provider, and creating the frontend components for login and registration. Ensure proper error handling and security measures are in place.",
+//     subtasks: []
+//   },
+//   {
+//     id: 2,
+//     name: "Refactor database schema",
+//     priority: "medium",
+//     deadline: "2024-04-01",
+//     status: "todo",
+//     description: "Optimize the current database schema to improve query performance and reduce redundancy. This task involves analyzing the current schema, identifying bottlenecks, and implementing changes such as adding indexes, normalizing tables, and optimizing join operations.",
+//     subtasks: []
+//   },
+//   {
+//     id: 3,
+//     name: "Create comprehensive test suite",
+//     priority: "high",
+//     deadline: "2024-03-30",
+//     status: "in progress",
+//     description: "Develop a comprehensive test suite covering unit tests, integration tests, and end-to-end tests for the entire application. This includes writing test cases for all major components, setting up a CI/CD pipeline for automated testing, and ensuring at least 80% code coverage.",
+//     subtasks: []
+//   },
+// ]
 
 const priorityColors = {
   low: "bg-blue-100 text-blue-800",
@@ -56,6 +60,12 @@ const TaskItem = ({ task, onToggleSubtask, onRegenerateSubtasks }) => {
   const { generateSubtasks, isLoading, error } = useGroqAI()
   const [localSubtasks, setLocalSubtasks] = useState(task.subtasks || [])
   const [hasInitialized, setHasInitialized] = useState(false)
+
+
+
+
+
+
 
   useEffect(() => {
     const fetchSubtasks = async () => {
@@ -154,7 +164,50 @@ const TaskItem = ({ task, onToggleSubtask, onRegenerateSubtasks }) => {
 }
 
 const TodoList = () => {
-  const [tasks, setTasks] = useState(dummyTasks)
+  const [tasks, setTasks] = useState([])
+
+
+
+
+  const fetchTasks = async () => {
+    let data = await checkToken()
+    try {
+      const response = await fetch(`${BaseApiUrl}/api/task/userId`, {
+        method: 'GET',
+        headers: {
+          'id': data.user.email
+        }
+      });
+      
+      const json = await response.json();
+
+      if (json) {
+        setTasks(json.data.map(task => ({
+          id: task._id,
+          name: task.title,
+          priority: task.priority.toLowerCase(),
+          deadline: task.dueDate,
+          status: task.status.toLowerCase(),
+          description: task.description,
+          assignedBy: task.assignedBy,
+          assignedTo: task.assignedTo,
+          createdAt: task.createdAt,
+          updatedAt: task.updatedAt,
+          subtasks: []
+        })));
+      }
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [])
+
+
+
+
 
   const handleToggleSubtask = (taskId, subtaskId) => {
     setTasks(prevTasks =>

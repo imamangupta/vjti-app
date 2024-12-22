@@ -21,7 +21,7 @@ export function useGroqAI() {
           model: 'mixtral-8x7b-32768',
           messages: [
             { role: 'system', content: 'You are an AI assistant that breaks down tasks into specific, actionable subtasks.' },
-            { role: 'user', content: `Given the following task description, break it down into a list of 5-8 specific, actionable subtasks. and also add emoji  Provide the subtasks as a JSON array of strings: ${taskDescription}` }
+            { role: 'user', content: `Given the following task description, break it down into a list of 5-8 specific, actionable subtasks. Provide the subtasks as a JSON array of strings,it should 4-6 words: ${taskDescription}` }
           ],
           max_tokens: 500,
           temperature: 0.7,
@@ -29,15 +29,42 @@ export function useGroqAI() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate subtasks with Groq AI');
+        throw new Error(`Failed to generate subtasks with Groq AI: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
-      const subtasksJson = JSON.parse(data.choices[0].message.content);
+      const content = data.choices[0].message.content;
+
+      // Attempt to parse the content as JSON
+      let subtasksJson;
+      try {
+        subtasksJson = JSON.parse(content);
+      } catch (parseError) {
+        console.error('Error parsing Groq AI response:', parseError);
+        console.log('Raw response:', content);
+        
+        // Attempt to extract a JSON array from the response
+        const jsonArrayMatch = content.match(/\[[\s\S]*\]/);
+        if (jsonArrayMatch) {
+          try {
+            subtasksJson = JSON.parse(jsonArrayMatch[0]);
+          } catch (extractError) {
+            console.error('Error extracting JSON array from response:', extractError);
+            throw new Error('Failed to parse subtasks from Groq AI response');
+          }
+        } else {
+          throw new Error('Failed to extract subtasks from Groq AI response');
+        }
+      }
+
+      if (!Array.isArray(subtasksJson)) {
+        throw new Error('Groq AI response is not an array of subtasks');
+      }
+
       return subtasksJson.map((subtask, index) => ({ id: index, title: subtask, completed: false }));
     } catch (error) {
       console.error('Error generating subtasks with Groq AI:', error);
-      setError("Failed to generate subtasks. Please try again later.");
+      setError(error.message || "Failed to generate subtasks. Please try again later.");
       return [];
     } finally {
       setIsLoading(false);
