@@ -30,11 +30,10 @@ const companyNav = [
   { name: "Tasks", icon: ClipboardList, link: "/dashboard/tasks" },
   { name: "AI Task Breakdown", icon: ListChecks, link: "/dashboard/todo" },
   { name: "10x Prompt", icon: BotMessageSquare, link: "/dashboard/prompt" },
-  { name: "AR Game", icon: Gamepad2, link: "/dashboard/ar" },
+  { name: "AR/VR Workspace", icon: Gamepad2, link: "/dashboard/ar" },
   { name: "Messaging", icon: MessageSquareText, link: "/dashboard/messaging" },
   { name: "VideCall", icon: Video, link: "/dashboard/video" },
   { name: "Focus Mode",icon: Focus, link: "/dashboard/focus" },
-  { name: "Meditation",icon: PersonStanding, link: "/dashboard/meditation" },
   { name: "Settings", icon: Settings, link: "/dashboard/settings" },
 ];
 
