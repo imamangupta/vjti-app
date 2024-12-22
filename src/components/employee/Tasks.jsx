@@ -15,41 +15,6 @@ import { Label } from "@/components/ui/label"
 import { checkToken } from "@/utils/getUserData"
 import { BaseApiUrl } from "@/utils/constants"
 
-const initialTasks = [
-  {
-    id: 1,
-    name: "Develop new feature",
-    priority: "high",
-    deadline: "2024-03-15",
-    status: "in progress",
-    description: "Implement user authentication system with OAuth 2.0. This will involve setting up the backend API endpoints, integrating with a third-party OAuth provider, and creating the frontend components for login and registration. Ensure proper error handling and security measures are in place.",
-  },
-  {
-    id: 2,
-    name: "Refactor database schema",
-    priority: "medium",
-    deadline: "2024-04-01",
-    status: "todo",
-    description: "Optimize the current database schema to improve query performance and reduce redundancy. This task involves analyzing the current schema, identifying bottlenecks, and implementing changes such as adding indexes, normalizing tables, and optimizing join operations. Document all changes and update the ORM models accordingly.",
-  },
-  {
-    id: 3,
-    name: "Create comprehensive test suite",
-    priority: "high",
-    deadline: "2024-03-30",
-    status: "in progress",
-    description: "Develop a comprehensive test suite covering unit tests, integration tests, and end-to-end tests for the entire application. This includes writing test cases for all major components, setting up a CI/CD pipeline for automated testing, and ensuring at least 80% code coverage. Use Jest for unit tests, Cypress for end-to-end tests, and implement mock services for API calls.",
-  },
-  {
-    id: 4,
-    name: "Implement responsive design",
-    priority: "medium",
-    deadline: "2024-04-15",
-    status: "todo",
-    description: "Make the application fully responsive across all devices and screen sizes. This task involves auditing the current UI, identifying breakpoints, and implementing responsive design patterns. Use CSS Grid and Flexbox for layouts, implement a mobile-first approach, and ensure all interactive elements are touch-friendly. Test on various devices and browsers to ensure consistency.",
-  },
-]
-
 const priorityColors = {
   low: "bg-blue-100 text-blue-800 border-blue-200",
   medium: "bg-green-100 text-green-800 border-green-200",
@@ -66,6 +31,19 @@ const statusColors = {
 const TaskCard = ({ task, onStatusChange, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return "No date set";
+      }
+      return format(date, "yyyy-MM-dd");
+    } catch (error) {
+      console.error("Date formatting error:", error);
+      return "Invalid date";
+    }
+  }
+
   const toggleExpand = () => setIsExpanded(!isExpanded)
 
   const cardVariants = {
@@ -78,8 +56,8 @@ const TaskCard = ({ task, onStatusChange, onDelete }) => {
     expanded: { opacity: 1, height: "auto" },
   }
 
-  const isOverdue = isBefore(new Date(task.deadline), new Date()) && task.status !== "completed"
-  const isDueToday = isToday(new Date(task.deadline)) && task.status !== "completed"
+  const isOverdue = task.deadline ? isBefore(new Date(task.deadline), new Date()) && task.status !== "completed" : false;
+  const isDueToday = task.deadline ? isToday(new Date(task.deadline)) && task.status !== "completed" : false;
 
   return (
     <motion.div
@@ -98,7 +76,7 @@ const TaskCard = ({ task, onStatusChange, onDelete }) => {
             <div>
               <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">{task.name}</CardTitle>
               <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
-                Due: {format(new Date(task.deadline), "MMM d, yyyy")}
+                Due: {formatDate(task.deadline)}
                 {isOverdue && <span className="ml-2 text-red-500 font-semibold">Overdue!</span>}
                 {isDueToday && <span className="ml-2 text-yellow-500 font-semibold">Due today!</span>}
               </CardDescription>
@@ -161,20 +139,13 @@ const TaskCard = ({ task, onStatusChange, onDelete }) => {
 }
 
 const Task = () => {
-  const [tasks, setTasks] = useState(initialTasks)
+  const [tasks, setTasks] = useState([])
   const [mytasks, setMyTasks] = useState([])
   const [sortBy, setSortBy] = useState("deadline")
   const [sortOrder, setSortOrder] = useState("asc")
   const [filterStatus, setFilterStatus] = useState("all")
   const [filterPriority, setFilterPriority] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
-
-
-
-
-
-
-
 
   const fetchTasks = async () => {
     let data = await checkToken()
@@ -189,35 +160,25 @@ const Task = () => {
       const json = await response.json();
 
       if (json) {
-        console.log(json);
-        
-        setMyTasks(json.data);
+        setTasks(json.data.map(task => ({
+          id: task._id,
+          name: task.title,
+          priority: task.priority.toLowerCase(),
+          deadline: task.dueDate,
+          status: task.status.toLowerCase(),
+          description: task.description,
+          assignedBy: task.assignedBy,
+          assignedTo: task.assignedTo,
+          createdAt: task.createdAt,
+          updatedAt: task.updatedAt
+        })));
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching tasks:', error);
     }
   };
 
-
-
-
-
-
-
-
-
-
-
-
   useEffect(() => {
-    // Simulated API call to fetch tasks
-    // In a real application, you would fetch tasks from an API here
-    // Example:
-    // const fetchTasks = async () => {
-    //   const response = await fetch('/api/tasks');
-    //   const data = await response.json();
-    //   setTasks(data);
-    // };
     fetchTasks();
   }, [])
 
