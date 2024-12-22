@@ -165,6 +165,8 @@ const Editor = () => {
         }
       });
 
+      persistenceRef.current = new IndexeddbPersistence(`realtime-editor-${roomId}`, ydocRef.current);
+
       // Set up awareness handler
       const handleAwarenessUpdate = () => {
         if (providerRef.current) {

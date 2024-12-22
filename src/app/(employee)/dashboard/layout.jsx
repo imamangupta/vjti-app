@@ -1,20 +1,41 @@
-import EmployeeSidebar from '@/components/employee/EmployeeSidebar'
-import { SidebarProvider } from '@/components/ui/sidebar'
-import React from 'react'
-import { motion, } from "framer-motion"
+'use client'
 
-const selectedComponent = 'overview'
-const layout = ({children}) => {
+import { useState } from 'react'
+import EmployeeSidebar from '@/components/employee/EmployeeSidebar'
+import { Menu } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+
+const DashboardLayout = ({ children }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
   return (
-    <SidebarProvider>
-        <div>
-            <EmployeeSidebar />
+    <div className="min-h-screen bg-background">
+      <EmployeeSidebar 
+        isOpen={isSidebarOpen} 
+        closeSidebar={() => setIsSidebarOpen(false)} 
+      />
+      
+      {/* Main Content */}
+      <main className={`
+        transition-all duration-200 ease-in-out
+        md:ml-[240px] lg:ml-[280px]
+      `}>
+        {/* Toggle Button for Mobile */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-4 left-4 z-50 md:hidden"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+
+        <div className="container p-4 md:p-8">
+          {children}
         </div>
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background p-6">
-            {children}
-          </main>
-    </SidebarProvider>
+      </main>
+    </div>
   )
 }
 
-export default layout
+export default DashboardLayout

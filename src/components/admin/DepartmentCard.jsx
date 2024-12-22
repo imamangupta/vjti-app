@@ -28,10 +28,7 @@ export function DepartmentCard({ department }) {
               <Users className="h-5 w-5 text-muted-foreground mr-2" />
               <span className="text-sm text-muted-foreground">{department.employeeCount} employees</span>
             </div>
-            <div className="flex items-center">
-              <DollarSign className="h-5 w-5 text-muted-foreground mr-2" />
-              <span className="text-sm text-muted-foreground">${department.budget}</span>
-            </div>
+          
           </div>
           <Button asChild>
             <Link href={`/tl-dashboard/${department.id}`}>View details</Link>
