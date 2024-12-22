@@ -29,6 +29,8 @@ const SignUpPage = () => {
     const username = formData.get("username");
     const role = formData.get("role");
     const password = formData.get("password");
+    const firstname = formData.get("firstname");
+    const lastname = formData.get("lastname");
 
 
 
@@ -39,7 +41,7 @@ const SignUpPage = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: email, password: password, role: role, username: username,firstname:'firstname',lastname:'lastname' })
+      body: JSON.stringify({ email: email, password: password, role: role, username: username,firstname:firstname,lastname:lastname })
     });
     const json = await response.json();
 
@@ -72,6 +74,16 @@ const SignUpPage = () => {
           <div className="flex flex-col space-y-2 my-4">
             <Label>User Name</Label>
             <Input name="username" required />
+          </div>
+       
+
+          <div className="flex flex-col space-y-2 my-4">
+            <Label>First Name</Label>
+            <Input name="firstname" required />
+          </div>
+          <div className="flex flex-col space-y-2 my-4">
+            <Label>Last Name</Label>
+            <Input name="lastname" required />
           </div>
           <div className="flex flex-col space-y-2 my-5">
             <Label className="mb-3">Create Role as</Label>
