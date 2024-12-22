@@ -28,6 +28,7 @@ import {
 const companyNav = [
   { name: "Dashboard", icon: ChartArea, link: "/dashboard" },
   { name: "Tasks", icon: ClipboardList, link: "/dashboard/tasks" },
+  { name: "Document reserch", icon: ClipboardList, link: "/dashboard/document?name='pratik'" },
   { name: "AI Task Breakdown", icon: ListChecks, link: "/dashboard/todo" },
   { name: "10x Prompt", icon: BotMessageSquare, link: "/dashboard/prompt" },
   { name: "AR/VR Workspace", icon: Gamepad2, link: "/dashboard/ar" },
