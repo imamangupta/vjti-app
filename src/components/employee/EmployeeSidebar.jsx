@@ -43,6 +43,7 @@ export default function EmployeeSidebar({ isOpen, closeSidebar }) {
 
   const handleLogout = () => {
     router.push('/login')
+    localStorage.clear()
   }
 
   return (

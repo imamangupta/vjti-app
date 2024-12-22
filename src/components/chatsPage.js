@@ -1,5 +1,6 @@
 import { PrettyChatWindow } from "react-chat-engine-pretty";
 
+
 const ChatsPage = ({data}) => {
   return (
     <div style={{height:'100vh'}}>
