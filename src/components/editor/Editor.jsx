@@ -11,7 +11,6 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import Placeholder from '@tiptap/extension-placeholder'
 import SlashCommandMenu from './SlashCommandMenu'
-import { parseAppSegmentConfig } from 'next/dist/build/segment-config/app/app-segment-config'
 import { useSearchParams } from 'next/navigation'
 
 const ydoc = new Y.Doc()
